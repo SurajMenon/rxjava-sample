@@ -1,6 +1,7 @@
 import io.reactivex.Observer;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.operators.observable.ObservableGroupBy.GroupByObserver;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.ResourceObserver;
 
@@ -97,4 +98,15 @@ public class ObserverFactory {
 
 		return (DisposableObserver<Long>) observer;
 	}
+	
+//	public static GroupByObserver<Obj, String, Integer> getGroupByObserver(){
+//		GroupByObserver<Obj, String, Integer> g = new GroupByObserver<>(actual, keySelector, valueSelector, bufferSize, delayError);
+//		
+//		return g;
+//				
+//	}
+//
+//	class Obj{
+//		
+//	}
 }

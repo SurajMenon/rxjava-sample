@@ -1,19 +1,28 @@
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.reactivex.Observable;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.observables.GroupedObservable;
 
 public class Operators {
 
 	public static void main(String args[]) {
-		map();
-		filter();
-		filterAndMap();
-		take();
-		skip();
-		repeat();
-		takeWhile();
-		distinct();
-		scan();
+//		map();
+//		filter();
+//		filterAndMap();
+//		take();
+//		skip();
+//		repeat();
+//		takeWhile();
+//		distinct();
+//		scan();
+//		ifEmpty();
+
 		groupBy();
-		ifEmpty();
 	}
 
 	// map() to transform one observable to another
@@ -83,12 +92,44 @@ public class Operators {
 	}
 
 	private static void groupBy() {
+		Observable<Integer> justObservable = Observable.just(1, 2, 3, 4, 5, 6);
+
+		// Logic to group By
+		Function<Integer, String> keySelector = new Function<Integer, String>() {
+			@Override
+			public String apply(Integer t) throws Exception {
+				if (t % 2 == 0)
+					return "Even";
+
+				return "Odd";
+			}
+		};
+
+		// TODO understand
+		BiFunction<Integer, Integer, Integer> ddf = new BiFunction<Integer, Integer, Integer>() {
+
+			@Override
+			public Integer apply(Integer t1, Integer t2) throws Exception {
+				System.out.println("t1:" + t1 + " t2:" + t2);
+				return t1 + t2;
+			}
+		};
+
+		justObservable.groupBy(keySelector).subscribe(x -> {
+			x.reduce(ddf).subscribe(System.out::println);
+		});
 
 	}
 
 	private static void ifEmpty() {
-		//defaultIfEmpty()
-		//switchIfEmpty()
+		Observable<Integer> emptyObservable = Observable.empty();
+		Observable<Integer> justObservable = Observable.just(1, 2, 3, 4, 5, 6);
+
+		// default value of observable if it is empty
+		emptyObservable.defaultIfEmpty(100).subscribe(ObserverFactory.getSlowObserver());
+
+		// switch to another observable if it is empty
+		emptyObservable.switchIfEmpty(justObservable).subscribe(ObserverFactory.getSlowObserver());
 	}
 
 }
